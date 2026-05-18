@@ -295,6 +295,8 @@ export default function ToDo() {
                                     StyledMenu={StyledMenu}
                                     StyledTableCell={StyledTableCell}
                                     StyledTableRow={StyledTableRow}
+                                    setList={setList}
+                                    displayedList={displayedList}
                                 />
                             )}
 
@@ -338,7 +340,7 @@ export default function ToDo() {
                                     StatusAnchorEl={StatusAnchorEl}
 
                                 />)}
-                          
+
                             {viewMode === 'board' && (
                                 <Board
                                     displayedList={displayedList}

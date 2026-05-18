@@ -14,7 +14,7 @@ import {
     DndContext,
     closestCenter
 } from "@dnd-kit/core";
-
+import Assign from "./Assign";
 import {
     SortableContext,
     useSortable,
@@ -40,15 +40,12 @@ function SortableItem({ row, children, isOverdue }) {
     } = useSortable({
         id: row.id,
         disabled: isOverdue(row)
-
     });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        cursor: isOverdue(row)
-            ? "not-allowed"
-            : "grab",
+        cursor: "default",
         opacity: 1,
         zIndex: isDragging ? 9999 : "auto",
         position: "relative",
@@ -62,10 +59,8 @@ function SortableItem({ row, children, isOverdue }) {
         <div
             ref={setNodeRef}
             style={style}
-            {...attributes}
-            {...listeners}
         >
-            {children}
+            {children(attributes, listeners)}
         </div>
     );
 }
@@ -76,7 +71,8 @@ export default function Board({
     isOverdue,
     handleEdit,
     handleDelete,
-    dispatch
+    dispatch,
+    row
 }) {
 
     const columns = [
@@ -85,29 +81,19 @@ export default function Board({
         "Completed",
         "Expire"
     ];
-
     const handleDragEnd = async (event) => {
-
         const { active, over } = event;
-
         if (!over) return;
-
         const draggedTask = displayedList.find(
             item => item.id === active.id
         );
-
         const overTask = displayedList.find(
             item => item.id === over.id
         );
-
         let newStatus;
-
-        // dropped over another task
         if (overTask) {
             newStatus = overTask.status;
         }
-
-        // dropped directly on column
         else {
             newStatus = over.id;
         }
@@ -119,11 +105,8 @@ export default function Board({
                 ? { ...item, status: newStatus }
                 : item
         );
-
         setList(updated);
-
         try {
-
             await fetch(
                 `http://localhost:3000/updatestatus/${active.id}`,
                 {
@@ -226,100 +209,126 @@ export default function Board({
                                                         row={row}
                                                         isOverdue={isOverdue}
                                                     >
-                                                        <Card
-                                                            sx={{
-                                                                bgcolor:
-                                                                    row.status === "Expire" || isOverdue(row)
-                                                                        ? "rgba(255,0,0,0.7)"
-                                                                        : "white"
-                                                            }}
-                                                        >
+                                                        {(attributes, listeners) => (
 
-                                                            <CardContent>
+                                                            <Card
+                                                                sx={{
+                                                                    bgcolor:
+                                                                        row.status === "Expire" || isOverdue(row)
+                                                                            ? "rgba(255,0,0,0.7)"
+                                                                            : "white"
+                                                                }}
+                                                            >
 
-                                                                <Typography
+                                                                <Box
+                                                                    {...attributes}
+                                                                    {...listeners}
                                                                     sx={{
-                                                                        fontSize: 14,
-                                                                        color: "text.secondary"
+                                                                        cursor: "grab",
+                                                                        display: "flex",
+                                                                        justifyContent: "flex-end",
+                                                                        p: 1,
+                                                                        fontSize: "20px"
                                                                     }}
                                                                 >
-                                                                    Date:
-                                                                    {
-                                                                        dayjs(row.date)
-                                                                            .local()
-                                                                            .format("DD-MM-YYYY")
-                                                                    }
-                                                                </Typography>
+                                                                    ☰
+                                                                </Box>
 
-                                                                <Typography variant="h6">
-                                                                    {row.taskName}
-                                                                </Typography>
+                                                                <Assign
+                                                                    isOverdue={isOverdue}
+                                                                    row={row}
+                                                                    displayedList={displayedList}
+                                                                    setList={setList}
+                                                                    mt={1}
+                                                                />
 
-                                                                <Typography sx={{ mb: 1 }}>
-                                                                    {row.desc || "No Description"}
-                                                                </Typography>
+                                                                <CardContent>
 
-                                                                <Divider sx={{ my: 1 }} />
+                                                                    <Typography
+                                                                        sx={{
+                                                                            fontSize: 14,
+                                                                            color: "text.secondary"
+                                                                        }}
+                                                                    >
+                                                                        Date:
+                                                                        {
+                                                                            dayjs(row.date)
+                                                                                .local()
+                                                                                .format("DD-MM-YYYY")
+                                                                        }
+                                                                    </Typography>
 
-                                                                <Typography variant="body2">
-                                                                    Due:
-                                                                    {
-                                                                        dayjs(row.dueDate)
-                                                                            .local()
-                                                                            .format("DD-MM-YYYY")
-                                                                    }
-                                                                </Typography>
+                                                                    <Typography variant="h6">
+                                                                        {row.taskName}
+                                                                    </Typography>
 
-                                                            </CardContent>
+                                                                    <Typography sx={{ mb: 1 }}>
+                                                                        {row.desc || "No Description"}
+                                                                    </Typography>
 
-                                                            <CardActions>
+                                                                    <Divider sx={{ my: 1 }} />
 
-                                                                <Button
-                                                                    size="small"
-                                                                    onClick={() => handleEdit(row)}
-                                                                    disabled={row.status === 'Expire' || isOverdue(row)}
-                                                                >
-                                                                    Edit
-                                                                </Button>
+                                                                    <Typography variant="body2">
+                                                                        Due:
+                                                                        {
+                                                                            dayjs(row.dueDate)
+                                                                                .local()
+                                                                                .format("DD-MM-YYYY")
+                                                                        }
+                                                                    </Typography>
 
-                                                                <Button
-                                                                    size="small"
-                                                                    color="error"
-                                                                    onClick={() =>
-                                                                        handleDelete({
-                                                                            id: row.id,
-                                                                            list: displayedList,
-                                                                            dispatch,
-                                                                            setList
-                                                                        }) }>
+                                                                </CardContent>
 
-                                                                Delete
-                                                            </Button>
+                                                                <CardActions>
 
-                                                        </CardActions>
+                                                                    <Button
+                                                                        size="small"
+                                                                        onClick={() => handleEdit(row)}
+                                                                        disabled={row.status === 'Expire' || isOverdue(row)}
+                                                                    >
+                                                                        Edit
+                                                                    </Button>
 
-                                                    </Card>
+                                                                    <Button
+                                                                        size="small"
+                                                                        color="error"
+                                                                        onClick={() =>
+                                                                            handleDelete({
+                                                                                id: row.id,
+                                                                                list: displayedList,
+                                                                                dispatch,
+                                                                                setList
+                                                                            })
+                                                                        }
+                                                                    >
+                                                                        Delete
+                                                                    </Button>
 
-                                                </SortableItem>
+                                                                </CardActions>
+
+                                                            </Card>
+
+                                                        )}
+                                                    </SortableItem>
 
                                                 </Box>
 
                                             ))}
 
-                                    </Box>
+                                        </Box>
 
-                                </SortableContext>
+                                    </SortableContext>
 
-                            </Paper>
+                                </Paper>
 
                             </Grid>
 
-                );
+                        );
                     })}
 
-            </Grid>
+                </Grid>
 
-        </DndContext>
+            </DndContext>
 
         </Box >
 

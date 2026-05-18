@@ -1,9 +1,10 @@
 //import { useSelector } from "react-redux";
-import {Box,Grid, Card, CardContent, Typography, Button, Divider, CardActions, MenuItem} from '@mui/material'
+import { Box, Grid, Card, CardContent, Typography, Button, Divider, CardActions, MenuItem } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import Assign from './Assign';
 import {
   DndContext,
   closestCenter,
@@ -17,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 
 import { CSS } from "@dnd-kit/utilities";
+
 dayjs.extend(utc);
 function SortableItem({
   row,
@@ -52,26 +54,26 @@ function SortableItem({
     >
 
       <Box
-  {...attributes}
-  {...listeners}
-  sx={{
-    position: "absolute",
-    top: 5,
-    right: 5,
-    cursor: "grab",
-    zIndex: 1000,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    opacity: 0.5,
+        {...attributes}
+        {...listeners}
+        sx={{
+          position: "absolute",
+          top: 5,
+          right: 5,
+          cursor: "grab",
+          zIndex: 1000,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: 0.5,
 
-    "&:hover": {
-      opacity: 1
-    }
-  }}
->
-  <DragIndicatorIcon fontSize="small" />
-</Box>
+          "&:hover": {
+            opacity: 1
+          }
+        }}
+      >
+        <DragIndicatorIcon fontSize="small" />
+      </Box>
 
       {children}
 
@@ -79,97 +81,104 @@ function SortableItem({
 
   );
 }
-export default function TileView({displayedList,setStatusAnchorEl,setList,handleStatusMenuOpen,isOverdue, StyledMenu,StatusAnchorEl,handleStatusChange, handleEdit,handleDelete}) {
-/* const tasks = useSelector(
-  (state) => state.task.tasks
-);
-*/
-const handleDragEnd = (event) => {
-  const { active, over } = event;
-
-  if (!over || active.id === over.id) return;
-
-  const oldIndex = displayedList.findIndex(
-    (item) => item.id === active.id
+export default function TileView({ displayedList, setStatusAnchorEl, setList, handleStatusMenuOpen, isOverdue, StyledMenu, StatusAnchorEl, handleStatusChange, handleEdit, handleDelete }) {
+  /* const tasks = useSelector(
+    (state) => state.task.tasks
   );
+  */
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
 
-  const newIndex = displayedList.findIndex(
-    (item) => item.id === over.id
-  );
+    if (!over || active.id === over.id) return;
 
-  const reordered = arrayMove(
-    displayedList,
-    oldIndex,
-    newIndex
-  );
+    const oldIndex = displayedList.findIndex(
+      (item) => item.id === active.id
+    );
 
-  // update parent state
-  setList(reordered);
-};
-    return (
-        <Box sx={{ px: 4 }} style={{ width: '100%' }} >
-          <DndContext
-  collisionDetection={closestCenter}
-  onDragEnd={handleDragEnd}
->
-  <SortableContext
-    items={displayedList.map(item => item.id)}
-    strategy={rectSortingStrategy}
-  >
-    <Grid container spacing={2}>
-                {displayedList.map((row) => (
-                    <Grid size={{ xs: 6, sm: 3, md: 2 }} sx={{ display: "flex" }} key={row.id} >
-                         <SortableItem row={row}>
-                        <Card variant="outlined" sx={{
-                            display: 'flex', width: '100%', height: '100%', flexDirection: 'column',
-                            bgcolor: row.status==='Expire'||isOverdue(row) ? 'rgba(255, 0, 0, 0.82)' : 'inherit'
-                        }}>
-                            <CardContent sx={{ flexGrow: 1 }}>
-                                <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                                    Date:{ dayjs(row.date).local().format("DD-MM-YYYY")}
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    Task: {row.taskName}
-                                </Typography>
-                                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                                    Description: {row.desc || "No description"}
-                                </Typography>
-                                <Divider sx={{ my: 1 }} />
-                                <Typography variant="body2">
-                                    <strong>Due:</strong>{ dayjs(row.dueDate).local().format("DD-MM-YYYY")} at {row.time? dayjs(`2000-01-01 ${row.time}`)
-                                            .format("hh:mm A") : ""}</Typography>
-                            </CardContent>
-                            <Button
-                                variant="contained"
-                                size="small"
-                                onClick={(e) => handleStatusMenuOpen(e, row.id)}
-                                endIcon={<KeyboardArrowDownIcon />}
-                                disabled={row.status==='Expire' || isOverdue(row)}
-                            >
-                                {isOverdue(row) ? "Expire" : row.status}
-                            </Button>
+    const newIndex = displayedList.findIndex(
+      (item) => item.id === over.id
+    );
 
-                            <StyledMenu
-                                anchorEl={StatusAnchorEl}
-                                open={Boolean(StatusAnchorEl)}
-                                onClose={() => setStatusAnchorEl(null)}
-                            >
-                                <MenuItem onClick={() => handleStatusChange("Pending")}>Pending</MenuItem>
-                                <MenuItem onClick={() => handleStatusChange("InProgress")}>InProgress</MenuItem>
-                                <MenuItem onClick={() => handleStatusChange("Completed")}>Completed</MenuItem>
-                                <MenuItem onClick={() => handleStatusChange("Expire")}>Expire</MenuItem>
-                            </StyledMenu>
-                            <CardActions style={{ display: "flex" }}>
-                                <Button size="small" onClick={() => handleEdit(row)} disabled={row.status==='Expire' || isOverdue(row)}>Edit</Button>
-                                <Button size="small" color="error" onClick={() => handleDelete(row.id)} sx={{ bgcolor: row.status==='Expire' || isOverdue(row) ? 'white' : 'inherit' }}>Delete</Button>
-                            </CardActions>
-                        </Card>
-                        </SortableItem>
-                    </Grid>
-                ))}
-            </Grid>
-            </SortableContext>
-            </DndContext>
-        </Box>
-    )
+    const reordered = arrayMove(
+      displayedList,
+      oldIndex,
+      newIndex
+    );
+
+    // update parent state
+    setList(reordered);
+  };
+  return (
+    <Box sx={{ px: 4 }} style={{ width: '100%' }} >
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={displayedList.map(item => item.id)}
+          strategy={rectSortingStrategy}
+        >
+          <Grid container spacing={2}>
+            {displayedList.map((row) => (
+              <Grid size={{ xs: 6, sm: 3, md: 2 }} sx={{ display: "flex" }} key={row.id} >
+                <SortableItem row={row}>
+                  <Card variant="outlined" sx={{
+                    display: 'flex', width: '100%', height: '100%', flexDirection: 'column',
+                    bgcolor: row.status === 'Expire' || isOverdue(row) ? 'rgba(255, 0, 0, 0.82)' : 'inherit'
+                  }}>
+                    <Assign
+                      isOverdue={isOverdue}
+                      row={row}
+                      displayedList={displayedList}
+                      setList={setList}
+                      mt={3}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                        Date:{dayjs(row.date).local().format("DD-MM-YYYY")}
+                      </Typography>
+                      <Typography variant="h5" component="div">
+                        Task: {row.taskName}
+                      </Typography>
+                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                        Description: {row.desc || "No description"}
+                      </Typography>
+                      <Divider sx={{ my: 1 }} />
+                      <Typography variant="body2">
+                        <strong>Due:</strong>{dayjs(row.dueDate).local().format("DD-MM-YYYY")} at {row.time ? dayjs(`2000-01-01 ${row.time}`)
+                          .format("hh:mm A") : ""}</Typography>
+                    </CardContent>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={(e) => handleStatusMenuOpen(e, row.id)}
+                      endIcon={<KeyboardArrowDownIcon />}
+                      disabled={row.status === 'Expire' || isOverdue(row)}
+                    >
+                      {isOverdue(row) ? "Expire" : row.status}
+                    </Button>
+
+                    <StyledMenu
+                      anchorEl={StatusAnchorEl}
+                      open={Boolean(StatusAnchorEl)}
+                      onClose={() => setStatusAnchorEl(null)}
+                    >
+                      <MenuItem onClick={() => handleStatusChange("Pending")}>Pending</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange("InProgress")}>InProgress</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange("Completed")}>Completed</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange("Expire")}>Expire</MenuItem>
+                    </StyledMenu>
+                    <CardActions style={{ display: "flex" }}>
+                      <Button size="small" onClick={() => handleEdit(row)} disabled={row.status === 'Expire' || isOverdue(row)}>Edit</Button>
+                      <Button size="small" color="error" onClick={() => handleDelete(row.id)} sx={{ bgcolor: row.status === 'Expire' || isOverdue(row) ? 'white' : 'inherit' }}>Delete</Button>
+                    </CardActions>
+                  </Card>
+                </SortableItem>
+              </Grid>
+            ))}
+          </Grid>
+        </SortableContext>
+      </DndContext>
+    </Box>
+  )
 }
