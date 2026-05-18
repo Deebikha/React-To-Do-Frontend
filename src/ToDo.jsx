@@ -23,6 +23,7 @@ import { handleEdit } from './Edit';
 import { handlesort } from './Sort';
 import { handleStatusChange } from './Statuschange';
 import Navbar from './Navbar';
+import Board from './Board';
 
 /*const List = styled('ul')({
     listStyle: 'none',
@@ -126,13 +127,13 @@ export default function ToDo() {
         setPageAnchorEl(null);
     };
     const totalPages = Math.ceil(displayedList.length / rowsPerPage);
-  useEffect(() => {
-   const loadData = async () => {
-      await fetchTasks();
-   };
+    useEffect(() => {
+        const loadData = async () => {
+            await fetchTasks();
+        };
 
-   loadData();
-}, []);
+        loadData();
+    }, []);
 
     useEffect(() => {
 
@@ -187,158 +188,169 @@ export default function ToDo() {
 
     return (
         <>
-        <Navbar/>
-        <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-                <Input
-                    setDate={setDate}
-                    settask={settask}
-                    setdesc={setdesc}
-                    setDueDate={setDueDate}
-                    settime={settime}
-                    disabledbtn={disabledbtn}
-                    date={date}
-                    task={task}
-                    desc={desc}
-                    dueDate={dueDate}
-                    time={time}
-                    handleAdd={() =>
-                        handleAdd({
-                            date,
-                            task,
-                            desc,
-                            dueDate,
-                            time,
-                            list,
-                            fetchTasks,
-                            dispatch,
-                            setDate,
-                            settask,
-                            setdesc,
-                            setDueDate,
-                            settime
-                        })}
-                />
+            <Navbar />
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={2}>
+                    <Input
+                        setDate={setDate}
+                        settask={settask}
+                        setdesc={setdesc}
+                        setDueDate={setDueDate}
+                        settime={settime}
+                        disabledbtn={disabledbtn}
+                        date={date}
+                        task={task}
+                        desc={desc}
+                        dueDate={dueDate}
+                        time={time}
+                        handleAdd={() =>
+                            handleAdd({
+                                date,
+                                task,
+                                desc,
+                                dueDate,
+                                time,
+                                list,
+                                fetchTasks,
+                                dispatch,
+                                setDate,
+                                settask,
+                                setdesc,
+                                setDueDate,
+                                settime
+                            })}
+                    />
 
-                <Options
-                    handlesort={(opt) =>
-                        handlesort(
-                            opt,
-                            list,
-                            setList,
-                            setsort,
-                            setSortAnchorEl
-                        )
-                    }
-                    displayedList={displayedList}
-                    setSortAnchorEl={setSortAnchorEl}
-                    KeyboardArrowDownIcon={KeyboardArrowDownIcon}
-                    StyledMenu={StyledMenu}
-                    setFilterAnchorEl={setFilterAnchorEl}
-                    handleFilter={handleFilter}
-                    setViewAnchorEl={setViewAnchorEl}
-                    setViewMode={setViewMode}
-                    setPageAnchorEl={setPageAnchorEl}
-                    setPage={setPage}
-                    sort={sort}
-                    activeFilter={activeFilter}
-                    viewMode={viewMode}
-                    rowsPerPage={rowsPerPage}
-                    sortAnchorEl={sortAnchorEl}
-                    filterAnchorEl={filterAnchorEl}
-                    viewAnchorEl={viewAnchorEl}
-                    PageAnchorEl={PageAnchorEl}
-                />
+                    <Options
+                        handlesort={(opt) =>
+                            handlesort(
+                                opt,
+                                list,
+                                setList,
+                                setsort,
+                                setSortAnchorEl
+                            )
+                        }
+                        displayedList={displayedList}
+                        setSortAnchorEl={setSortAnchorEl}
+                        KeyboardArrowDownIcon={KeyboardArrowDownIcon}
+                        StyledMenu={StyledMenu}
+                        setFilterAnchorEl={setFilterAnchorEl}
+                        handleFilter={handleFilter}
+                        setViewAnchorEl={setViewAnchorEl}
+                        setViewMode={setViewMode}
+                        setPageAnchorEl={setPageAnchorEl}
+                        setPage={setPage}
+                        sort={sort}
+                        activeFilter={activeFilter}
+                        viewMode={viewMode}
+                        rowsPerPage={rowsPerPage}
+                        sortAnchorEl={sortAnchorEl}
+                        filterAnchorEl={filterAnchorEl}
+                        viewAnchorEl={viewAnchorEl}
+                        PageAnchorEl={PageAnchorEl}
+                    />
 
-                {(list.length > 0) && (
-                    <>
-                        {viewMode === 'table' && (
-                            < TableView
-                                handleStatusChange={(newStatus) =>
-                                    handleStatusChange(
-                                        newStatus,
-                                        selectedStatusId,
-                                        list,
-                                        setList,
-                                        setStatusAnchorEl,
-                                        setSelectedStatusId
-                                    )
-                                }
-                                handleEdit={(row) =>
-                                    handleEdit({
-                                        row,
-                                        setDate,
-                                        setDueDate,
-                                        settask,
-                                        settime,
-                                        setdesc,
-                                        handleDelete
-                                    })
-                                }
-                                handleDelete={(id) =>
-                                    handleDelete({
-                                        id,
-                                        list,
-                                        dispatch,
-                                        setList
-                                    })
-                                }
-                                currentRows={currentRows}
-                                handleStatusMenuOpen={handleStatusMenuOpen}
-                                isOverdue={isOverdue}
-                                setStatusAnchorEl={setStatusAnchorEl}
-                                StatusAnchorEl={StatusAnchorEl}
-                                setCurrentPage={setCurrentPage}
-                                totalPages={totalPages}
-                                currentPage={currentPage}
-                                StyledMenu={StyledMenu}
-                                StyledTableCell={StyledTableCell}
-                                StyledTableRow={StyledTableRow}
-                            />
-                        )}
+                    {(list.length > 0) && (
+                        <>
+                            {viewMode === 'table' && (
+                                < TableView
+                                    handleStatusChange={(newStatus) =>
+                                        handleStatusChange(
+                                            newStatus,
+                                            selectedStatusId,
+                                            list,
+                                            setList,
+                                            setStatusAnchorEl,
+                                            setSelectedStatusId
+                                        )
+                                    }
+                                    handleEdit={(row) =>
+                                        handleEdit({
+                                            row,
+                                            setDate,
+                                            setDueDate,
+                                            settask,
+                                            settime,
+                                            setdesc,
+                                            handleDelete
+                                        })
+                                    }
+                                    handleDelete={(id) =>
+                                        handleDelete({
+                                            id,
+                                            list,
+                                            dispatch,
+                                            setList
+                                        })
+                                    }
+                                    currentRows={currentRows}
+                                    handleStatusMenuOpen={handleStatusMenuOpen}
+                                    isOverdue={isOverdue}
+                                    setStatusAnchorEl={setStatusAnchorEl}
+                                    StatusAnchorEl={StatusAnchorEl}
+                                    setCurrentPage={setCurrentPage}
+                                    totalPages={totalPages}
+                                    currentPage={currentPage}
+                                    StyledMenu={StyledMenu}
+                                    StyledTableCell={StyledTableCell}
+                                    StyledTableRow={StyledTableRow}
+                                />
+                            )}
 
-                        {viewMode === 'tile' && (
-                            <TileView
-                            setList={setList}
-                                handleStatusChange={(newStatus) =>
-                                    handleStatusChange(
-                                        newStatus,
-                                        selectedStatusId,
-                                        list,
-                                        setList,
-                                        setStatusAnchorEl,
-                                        setSelectedStatusId
-                                    )
-                                }
-                                handleEdit={(row) =>
-                                    handleEdit({
-                                        row,
-                                        setDate,
-                                        setDueDate,
-                                        settask,
-                                        settime,
-                                        setdesc,
-                                        handleDelete
-                                    })
-                                }
-                                handleDelete={(id) =>
-                                    handleDelete({
-                                        id,
-                                        list,
-                                        dispatch,
-                                        setList
-                                    })
-                                }
-                                displayedList={displayedList}
-                                setStatusAnchorEl={setStatusAnchorEl}
-                                handleStatusMenuOpen={handleStatusMenuOpen}
-                                isOverdue={isOverdue}
-                                StyledMenu={StyledMenu}
-                                StatusAnchorEl={StatusAnchorEl}
+                            {viewMode === 'tile' && (
+                                <TileView
+                                    setList={setList}
+                                    handleStatusChange={(newStatus) =>
+                                        handleStatusChange(
+                                            newStatus,
+                                            selectedStatusId,
+                                            list,
+                                            setList,
+                                            setStatusAnchorEl,
+                                            setSelectedStatusId
+                                        )
+                                    }
+                                    handleEdit={(row) =>
+                                        handleEdit({
+                                            row,
+                                            setDate,
+                                            setDueDate,
+                                            settask,
+                                            settime,
+                                            setdesc,
+                                            handleDelete
+                                        })
+                                    }
+                                    handleDelete={(id) =>
+                                        handleDelete({
+                                            id,
+                                            list,
+                                            dispatch,
+                                            setList
+                                        })
+                                    }
+                                    displayedList={displayedList}
+                                    setStatusAnchorEl={setStatusAnchorEl}
+                                    handleStatusMenuOpen={handleStatusMenuOpen}
+                                    isOverdue={isOverdue}
+                                    StyledMenu={StyledMenu}
+                                    StatusAnchorEl={StatusAnchorEl}
 
-                            />)}
-                    </>
-                )}
-            </Grid>
-        </Box></>)
+                                />)}
+                          
+                            {viewMode === 'board' && (
+                                <Board
+                                    displayedList={displayedList}
+                                    setList={setList}
+                                    isOverdue={isOverdue}
+                                    handleEdit={handleEdit}
+                                    handleDelete={handleDelete}
+                                    dispatch={dispatch}
+                                />
+                            )}
+                        </>
+                    )}
+                </Grid>
+            </Box></>)
 }

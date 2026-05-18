@@ -7,7 +7,7 @@ export default function Input({setDate,settask,setdesc,setDueDate,disabledbtn,ha
     ,task,desc,dueDate,time,settime}
 ) {
   return (
-    <><Grid size={{ sm: 12 }} sx={{ textAlign: 'center' }}Style={{}}>
+    <><Grid size={{ sm: 12 }} sx={{ textAlign: 'center' }}>
       </Grid><Grid size={{ xs: 6, sm: 2 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                   <DatePicker

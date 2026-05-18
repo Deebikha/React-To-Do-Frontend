@@ -5,20 +5,21 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-
+import IconButton from '@mui/material/IconButton';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 export default function Navbar() {
-const navigate = useNavigate();
-useEffect(() => {
+    const navigate = useNavigate();
+    useEffect(() => {
 
-    const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-    if (!token) {
-        navigate('/signin');
-    }
+        if (!token) {
+            navigate('/signin');
+        }
 
-}, []);
+    }, []);
     return (
-    
+
         <Box sx={{ flexGrow: 1 }}>
 
             <AppBar
@@ -34,18 +35,19 @@ useEffect(() => {
                         minHeight: "45px !important"
                     }}
                 >
-
+                    
                     <Typography
                         variant="h6"
                         sx={{ flexGrow: 1 }}
-                     style={{ textAlign:"center"}}  
+                        style={{ textAlign: "center" }}
                     >
                         ToDo App
                     </Typography>
 
-                    <Button color="inherit" onClick={()=>{
+                    <Button color="inherit" onClick={() => {
                         localStorage.removeItem("token");
-                        navigate('/signin')}}>
+                        navigate('/signin')
+                    }}>
                         Logout
                     </Button>
 

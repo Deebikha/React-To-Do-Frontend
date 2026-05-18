@@ -66,6 +66,7 @@ export default function Options({setSortAnchorEl,KeyboardArrowDownIcon,StyledMen
                 <StyledMenu anchorEl={viewAnchorEl} open={Boolean(viewAnchorEl)} onClose={() => setViewAnchorEl(null)}>
                   <MenuItem onClick={() => { setViewMode('tile'); setViewAnchorEl(null); }}>Tile</MenuItem>
                   <MenuItem onClick={() => { setViewMode('table'); setViewAnchorEl(null); }}> Table</MenuItem>
+                   <MenuItem onClick={() => { setViewMode('board'); setViewAnchorEl(null); }}> Board</MenuItem>
                 </StyledMenu>
               </Grid>
     
@@ -76,7 +77,7 @@ export default function Options({setSortAnchorEl,KeyboardArrowDownIcon,StyledMen
                   onClick={(e) => setPageAnchorEl(e.currentTarget)}
                   endIcon={<KeyboardArrowDownIcon />
                   }
-                  disabled={viewMode === 'tile'}
+                  disabled={viewMode === 'tile' || viewMode === 'board'}
                 >
                   {rowsPerPage}
                 </Button>

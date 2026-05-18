@@ -3,6 +3,7 @@ import {Box,Grid, Card, CardContent, Typography, Button, Divider, CardActions, M
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
   DndContext,
   closestCenter,
@@ -21,37 +22,61 @@ function SortableItem({
   row,
   children
 }) {
-const {
-  attributes,
-  listeners,
-  setNodeRef,
-  transform,
-  transition,
-  isDragging,
-} = useSortable({
-  id: row.id
-});
 
-const style = {
-  transform: CSS.Transform.toString(transform),
-  transition,
-  width: "100%",
-  height: "100%",
-  cursor: "grab",
-  opacity: isDragging ? 1 : 1,
-  zIndex: isDragging ? 9999 : "auto",
-  position: "relative",
-  backgroundColor: "white",
-};
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: row.id
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    width: "100%",
+    height: "100%",
+    zIndex: isDragging ? 9999 : "auto",
+    position: "relative",
+    backgroundColor: "white",
+  };
+
   return (
+
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
     >
+
+      <Box
+  {...attributes}
+  {...listeners}
+  sx={{
+    position: "absolute",
+    top: 5,
+    right: 5,
+    cursor: "grab",
+    zIndex: 1000,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.5,
+
+    "&:hover": {
+      opacity: 1
+    }
+  }}
+>
+  <DragIndicatorIcon fontSize="small" />
+</Box>
+
       {children}
+
     </div>
+
   );
 }
 export default function TileView({displayedList,setStatusAnchorEl,setList,handleStatusMenuOpen,isOverdue, StyledMenu,StatusAnchorEl,handleStatusChange, handleEdit,handleDelete}) {
@@ -97,7 +122,7 @@ const handleDragEnd = (event) => {
                          <SortableItem row={row}>
                         <Card variant="outlined" sx={{
                             display: 'flex', width: '100%', height: '100%', flexDirection: 'column',
-                            bgcolor: isOverdue(row) ? 'rgba(255, 0, 0, 0.82)' : 'inherit'
+                            bgcolor: row.status==='Expire'||isOverdue(row) ? 'rgba(255, 0, 0, 0.82)' : 'inherit'
                         }}>
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
@@ -119,7 +144,7 @@ const handleDragEnd = (event) => {
                                 size="small"
                                 onClick={(e) => handleStatusMenuOpen(e, row.id)}
                                 endIcon={<KeyboardArrowDownIcon />}
-                                disabled={isOverdue(row)}
+                                disabled={row.status==='Expire' || isOverdue(row)}
                             >
                                 {isOverdue(row) ? "Expire" : row.status}
                             </Button>
@@ -135,8 +160,8 @@ const handleDragEnd = (event) => {
                                 <MenuItem onClick={() => handleStatusChange("Expire")}>Expire</MenuItem>
                             </StyledMenu>
                             <CardActions style={{ display: "flex" }}>
-                                <Button size="small" onClick={() => handleEdit(row)} disabled={isOverdue(row)}>Edit</Button>
-                                <Button size="small" color="error" onClick={() => handleDelete(row.id)} sx={{ bgcolor: isOverdue(row) ? 'white' : 'inherit' }}>Delete</Button>
+                                <Button size="small" onClick={() => handleEdit(row)} disabled={row.status==='Expire' || isOverdue(row)}>Edit</Button>
+                                <Button size="small" color="error" onClick={() => handleDelete(row.id)} sx={{ bgcolor: row.status==='Expire' || isOverdue(row) ? 'white' : 'inherit' }}>Delete</Button>
                             </CardActions>
                         </Card>
                         </SortableItem>

@@ -35,7 +35,7 @@ export default function TableView({currentRows,handleStatusMenuOpen,isOverdue,se
                       <TableBody>
                         {Array.isArray(currentRows) && currentRows.map((row) => (
                           <StyledTableRow key={row.id} sx={{
-                            bgcolor: isOverdue(row) ? 'rgba(255, 0, 0, 0.82) !important' : 'inherit',
+                            bgcolor: row.status==='Expire' || isOverdue(row) ? 'rgba(255, 0, 0, 0.82) !important' : 'inherit',
                           }}
                           >
                             <StyledTableCell component="th" scope="row">{dayjs(row.date).local().format("DD-MM-YYYY")}</StyledTableCell>
@@ -52,7 +52,7 @@ export default function TableView({currentRows,handleStatusMenuOpen,isOverdue,se
                                   onClick={(e) => handleStatusMenuOpen(e, row.id)}
                                   endIcon={<KeyboardArrowDownIcon />}
                                   style={{ align: "center" }}
-                                  disabled={isOverdue(row)}
+                                  disabled={row.status==='Expire' || isOverdue(row)}
 
                                 >
                                   {isOverdue(row) ? 'Expire' : row.status}
@@ -72,7 +72,7 @@ export default function TableView({currentRows,handleStatusMenuOpen,isOverdue,se
                             </StyledTableCell>
                             <StyledTableCell align="center">
 
-                              <Button variant="contained" size="small" color="info" onClick={() => handleEdit(row)} disabled={isOverdue(row)}>
+                              <Button variant="contained" size="small" color="info" onClick={() => handleEdit(row)} disabled={row.status==='Expire' || isOverdue(row)}>
                                 Edit
                               </Button></StyledTableCell>
                             <StyledTableCell align="center">
