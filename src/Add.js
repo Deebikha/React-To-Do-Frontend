@@ -44,7 +44,7 @@ export const handleAdd = async ({
                 }
             );
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
             await fetchTasks();
             dispatch(addTask(data.data[0]));
             setDate(null);

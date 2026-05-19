@@ -51,8 +51,6 @@ export default function UserManagement() {
     const [users, setUsers] = useState([]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openpass, setopenpass] = useState(false);
-    const [oldPassword, setOldPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
     const [emailerror, setemailerror] = useState(false);
     const [phoneerror, setphoneerror] = useState(false);
     const [oldPassError, setOldPassError] = useState(false);

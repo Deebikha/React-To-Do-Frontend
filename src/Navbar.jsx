@@ -5,8 +5,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import IconButton from '@mui/material/IconButton';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+
 export default function Navbar() {
     const navigate = useNavigate();
     useEffect(() => {
@@ -43,6 +42,9 @@ export default function Navbar() {
                     >
                         ToDo App
                     </Typography>
+                    <Button color='inherit' onClick={() => {
+                        navigate('/todo');
+                    }}> Home </Button>
                     <Button color='inherit' onClick={() => {
                         navigate('/user-Management');
                     }}> User Management </Button>

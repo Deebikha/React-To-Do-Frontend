@@ -7,7 +7,7 @@ import {
     FormControlLabel,
     Radio
 } from "@mui/material";
-
+import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 
 import { handleEmail } from "./Email";
@@ -27,7 +27,7 @@ export default function Forgot() {
 
     const [newPassError, setNewPassError] = useState(false);
     const [confirmPassError, setConfirmPassError] = useState(false);
-
+    const navigate=useNavigate();
     const result =
         value !== '' &&
         newPassword !== '' &&
@@ -195,6 +195,11 @@ export default function Forgot() {
                 >
                     Change Password
                 </Button>
+                <Button
+                onClick={()=>{
+                    navigate('/signin')
+                }}
+                >SignIn</Button>
 
             </Paper>
 

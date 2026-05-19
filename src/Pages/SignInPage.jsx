@@ -108,7 +108,7 @@ export default function SignIn() {
                         color="primary"
                         onClick={() => navigate('/forgot')}
                     >
-                        Forgot Button
+                        Forgot Password
                     </Button>
 
                     <Typography
