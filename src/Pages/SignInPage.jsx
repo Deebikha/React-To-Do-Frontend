@@ -14,6 +14,7 @@ export default function SignIn() {
     const [pass, setpass] = useState("");
     const login_result = username !== "" &&
         pass !== "" && !passerror;
+
     return (
         <center>
             <Paper
@@ -77,20 +78,15 @@ export default function SignIn() {
                                 const response = await fetch(
                                     `http://localhost:3000/login?userName=${username}&password=${pass}`
                                 );
-
                                 const data = await response.json();
-
-                                console.log(data);
-
+                                // console.log(data);
                                 if (!response.ok) {
-
                                     alert(data.message);
                                     return;
                                 }
-
                                 localStorage.setItem("token", data.token);
 
-                                console.log(localStorage.getItem("token"));
+                                //console.log(localStorage.getItem("token"));
 
                                 alert(data.message);
 
@@ -106,6 +102,13 @@ export default function SignIn() {
                         }}
                     >
                         Login
+                    </Button>
+                    <Button
+                        variant="text"
+                        color="primary"
+                        onClick={() => navigate('/forgot')}
+                    >
+                        Forgot Button
                     </Button>
 
                     <Typography

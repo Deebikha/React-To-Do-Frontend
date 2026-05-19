@@ -35,7 +35,7 @@ export default function Navbar() {
                         minHeight: "45px !important"
                     }}
                 >
-                    
+
                     <Typography
                         variant="h6"
                         sx={{ flexGrow: 1 }}
@@ -43,7 +43,9 @@ export default function Navbar() {
                     >
                         ToDo App
                     </Typography>
-
+                    <Button color='inherit' onClick={() => {
+                        navigate('/user-Management');
+                    }}> User Management </Button>
                     <Button color="inherit" onClick={() => {
                         localStorage.removeItem("token");
                         navigate('/signin')

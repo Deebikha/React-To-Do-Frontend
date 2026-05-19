@@ -13,47 +13,55 @@ export default function Assign({
 
     const users = [
         {
-            id: 1,
-            name: "Test1"
+            id: 10,
+            name: "Test10"
         },
         {
-            id: 2,
-            name: "Test2"
+            id: 11,
+            name: "Test11"
         },
         {
-            id: 3,
-            name: "Test3"
+            id: 12,
+            name: "Test12"
         },
         {
-            id: 4,
-            name: "Test4"
+            id: 13,
+            name: "Test13"
+        },
+        {
+            id: 14,
+            name: "Test14"
         }
     ];
 
-    const selectedUser =
-        users.find(
-            user => user.name === row.assignedto
-        ) || null;
-
+    // row.assignedto contains user ID
+    const selectedUser = row.assignedto
+        ? {
+            id: row.assignedto,
+            name: `Test${row.assignedto}`
+        }
+        : null;
+    //console.log(row.assignedto);
+    //console.log(users);
     const handleAssign = async (newValue) => {
 
-        const assignedName =
-            typeof newValue === "string"
-                ? newValue
-                : newValue?.name || "";
+        const assignedId =
+            typeof newValue === "object"
+                ? newValue.id
+                : null;
 
         const updated = displayedList.map(item =>
             item.id === row.id
                 ? {
                     ...item,
-                    assignedto: assignedName
+                    assignedto: assignedId
                 }
                 : item
         );
 
         setList(updated);
 
-        const response = await fetch(
+        await fetch(
             `http://localhost:3000/updateassign/${row.id}`,
             {
                 method: "PUT",
@@ -61,12 +69,10 @@ export default function Assign({
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    assignedto: assignedName
+                    assignedto: assignedId
                 })
             }
         );
-
-        const data = await response.json();
     };
 
     return (
@@ -80,10 +86,9 @@ export default function Assign({
 
             options={users}
 
-            value={selectedUser || row.assignedto || ""}
+            value={selectedUser}
 
             isOptionEqualToValue={(option, value) =>
-                typeof value !== "string" &&
                 option.id === value.id
             }
 
@@ -92,9 +97,7 @@ export default function Assign({
             }}
 
             getOptionLabel={(option) =>
-                typeof option === "string"
-                    ? option
-                    : option.name
+                option?.name || ""
             }
 
             sx={{
